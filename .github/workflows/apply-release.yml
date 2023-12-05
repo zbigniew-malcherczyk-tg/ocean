@@ -20,6 +20,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2
+
       - name: Get package version
         run: |
           version=$(poetry search port-ocean | grep port-ocean | sed 's/.*(\(.*\))/\1/')
