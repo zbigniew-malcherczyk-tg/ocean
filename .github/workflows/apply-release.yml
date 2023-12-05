@@ -16,6 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
       - name: Get package version
         run: |
           version=$(poetry search port-ocean | grep port-ocean | sed 's/.*(\(.*\))/\1/')
