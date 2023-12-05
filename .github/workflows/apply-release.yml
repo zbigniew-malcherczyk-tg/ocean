@@ -30,7 +30,8 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          ./scripts/bump-all.sh
+          applied_version="^${version}"
+          ./scripts/bump-all.sh $applied_version
           
           git push origin $branch_name
 
