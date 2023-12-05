@@ -37,10 +37,16 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          applied_version="^${version}"
+          echo "Installing all integrations"
           make install/all
-          ./scripts/bump-all.sh $applied_version
+          echo "Finished installing all integrations"
           
+          applied_version="^$version"
+          echo "apply version: $applied_version"
+          ./scripts/bump-all.sh $applied_version
+          echo "Finished applying changes"
+          
+          echo "Pushing changes to branch $branch_name"
           git push --set-upstream origin $branch_name
 
       - name: Open pull request
