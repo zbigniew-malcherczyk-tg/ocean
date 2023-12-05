@@ -34,6 +34,9 @@ jobs:
 
       - name: Apply changes
         run: |
+          version=$(poetry search port-ocean | grep port-ocean | sed 's/.*(\(.*\))/\1/')
+          pr_name="Release ${version}"
+          branch_name="release-${version}"
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
@@ -41,13 +44,13 @@ jobs:
           make install/all
           echo "Finished installing all integrations"
           
-          applied_version="^$$version"
-          echo "apply version: $$applied_version"
-          ./scripts/bump-all.sh $$applied_version
+          applied_version="^$version"
+          echo "apply version: $applied_version"
+          ./scripts/bump-all.sh $applied_version
           echo "Finished applying changes"
           
-          echo "Pushing changes to branch $$branch_name"
-          git push --set-upstream origin $$branch_name
+          echo "Pushing changes to branch $branch_name"
+          git push --set-upstream origin $branch_name
 
       - name: Open pull request
         uses: peter-evans/create-pull-request@v3
