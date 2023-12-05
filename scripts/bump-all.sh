@@ -8,6 +8,8 @@ if [ -z "$VERSION" ]; then
     exit 1
 fi
 
+echo "Bumping all integrations to version $VERSION"
+
 # Loop through each folder in the 'integrations' directory
 for folder in "$(pwd)"/integrations/*; do
     if [ -d "$folder" ]; then
