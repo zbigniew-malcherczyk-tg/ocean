@@ -50,8 +50,8 @@ jobs:
           ./scripts/bump-all.sh $applied_version
           echo "Finished applying changes"
           
-          echo "Pushing changes to branch ${{ steps.get-version.outputs.VERSION }}"
-          git push --set-upstream origin ${{ steps.get-version.outputs.VERSION }}
+          echo "Pushing changes to branch ${{ steps.get-version.outputs.BRANCH_NAME }}"
+          git push --set-upstream origin ${{ steps.get-version.outputs.BRANCH_NAME }}
 
       - name: Open pull request
         uses: peter-evans/create-pull-request@v3
