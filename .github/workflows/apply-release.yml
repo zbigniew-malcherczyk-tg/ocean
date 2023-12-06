@@ -32,9 +32,9 @@ jobs:
           echo "Branch Name: $branch_name"
           echo "PR Name: $pr_name"
           git checkout -b $branch_name
-          echo "VERSION=$(version)" >> $GITHUB_OUTPUT
-          echo "BRANCH_NAME=$(branch_name)" >> $GITHUB_OUTPUT
-          echo "PR_NAME=$(pr_name)" >> $GITHUB_OUTPUT
+          echo "VERSION=$version" >> $GITHUB_OUTPUT
+          echo "BRANCH_NAME=$branch_name" >> $GITHUB_OUTPUT
+          echo "PR_NAME=$pr_name" >> $GITHUB_OUTPUT
 
       - name: Apply changes
         run: |
