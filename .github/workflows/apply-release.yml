@@ -24,6 +24,7 @@ jobs:
         uses: abatilo/actions-poetry@v2
 
       - name: Get package version
+        id: get-version
         run: |
           version=$(poetry search port-ocean | grep port-ocean | sed 's/.*(\(.*\))/\1/')
           pr_name="Release ${version}"
@@ -31,12 +32,12 @@ jobs:
           echo "Branch Name: $branch_name"
           echo "PR Name: $pr_name"
           git checkout -b $branch_name
+          echo "VERSION=$(version)" >> $GITHUB_OUTPUT
+          echo "BRANCH_NAME=$(branch_name)" >> $GITHUB_OUTPUT
+          echo "PR_NAME=$(pr_name)" >> $GITHUB_OUTPUT
 
       - name: Apply changes
         run: |
-          version=$(poetry search port-ocean | grep port-ocean | sed 's/.*(\(.*\))/\1/')
-          pr_name="Release ${version}"
-          branch_name="release-${version}"
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
@@ -44,18 +45,19 @@ jobs:
           make install/all
           echo "Finished installing all integrations"
           
-          applied_version="^$version"
+          applied_version="^${{ steps.get-version.outputs.VERSION }}"
           echo "apply version: $applied_version"
           ./scripts/bump-all.sh $applied_version
           echo "Finished applying changes"
           
-          echo "Pushing changes to branch $branch_name"
-          git push --set-upstream origin $branch_name
+          echo "Pushing changes to branch ${{ steps.get-version.outputs.VERSION }}"
+          git push --set-upstream origin ${{ steps.get-version.outputs.VERSION }}
 
       - name: Open pull request
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Propose changes"
-          title: $pr_name
+          title: ${{ steps.get-version.outputs.PR_NAME }}
           body: "This pull request includes changes made in the feature branch."
+          branch: ${{ steps.get-version.outputs.BRANCH_NAME }}
